@@ -27,7 +27,7 @@ Make sure you started the mysql container.
 $ make run-tests
 ```
 
-# Test Coverage
+### Test Coverage
 ```text
 Name                                                 Stmts   Miss  Cover
 ------------------------------------------------------------------------
