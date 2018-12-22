@@ -61,3 +61,10 @@ TOTAL                                                  694     40    94%
 ----------------------------------------------------------------------
 Ran 56 tests in 100.836s
 ```
+
+# Documentation
+## Database Diagram
+![Database Diagram](spec/database-diagram.png)
+
+## Swagger specification
+[Swagger File](spec/swagger.yaml)
