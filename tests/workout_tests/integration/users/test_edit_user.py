@@ -66,13 +66,3 @@ class UserDeletionTestCase(BaseTestCase):
         result = self.client.post(f"/users/{self.user.id}", json=new_data)
 
         self.assert403(result)
-
-    def test_edit_user_after_token_expires(self):
-        new_data = {
-            "first_name": "Testing",
-            "last_name": "User Application"
-        }
-        sleep(1.5)
-        result = self.client.post(f"/users/{self._auth_user.id}", json=new_data)
-
-        self.assert401(result)

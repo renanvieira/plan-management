@@ -43,6 +43,7 @@ class BaseTestCase(TestCase):
 
     def __init__(self, *args, **kwargs):
         self._auth_user = None
+        self.token_expiration = 300
         super(BaseTestCase, self).__init__(*args, **kwargs)
 
     def create_user(self, password="123$456#", deleted=False):
@@ -83,6 +84,7 @@ class BaseTestCase(TestCase):
 
     def setUp(self, need_auth=True):
         self.clean_users()
+        self.app.config["JWT_EXPIRATION_IN_SECONDS"] = self.token_expiration
 
         if need_auth:
             self.access_token = self.do_login()

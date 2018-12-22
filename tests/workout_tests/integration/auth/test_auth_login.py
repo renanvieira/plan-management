@@ -7,6 +7,7 @@ from workout_tests.bootstrap import BaseTestCase
 class AuthLoginTestCase(BaseTestCase):
 
     def setUp(self, **kwargs):
+        self.token_expiration = 2
         super(AuthLoginTestCase, self).setUp(need_auth=False)
         self.user_passwd = "123456$"
         self.user = self.create_user(password=self.user_passwd)
@@ -80,8 +81,20 @@ class AuthLoginTestCase(BaseTestCase):
         self.assertIsNotNone(result_login.json)
         self.assertIn("access_token", result_login.json)
 
-        sleep(1.3)
         data = dict(token=result_login.json["access_token"])
         result_refresh = self.client.post("/auth/refresh_token", json=data)
 
         self.assert400(result_refresh)
+
+    def test_edit_user_after_token_expires(self):
+
+        user = self.create_user()
+
+        new_data = {
+            "first_name": "Testing",
+            "last_name": "User Application"
+        }
+        sleep(1.5)
+        result = self.client.post(f"/users/{user.id}", json=new_data)
+
+        self.assert401(result)
