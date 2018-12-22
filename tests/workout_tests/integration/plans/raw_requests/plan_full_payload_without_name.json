@@ -1,0 +1,69 @@
+{
+  "days": [
+    {
+      "number": 1,
+      "exercises": [
+        {
+          "name": "Bench Press",
+          "sets": 3,
+          "reps": 7
+        },
+        {
+          "name": "Squat",
+          "sets": 3,
+          "reps": 12
+        },
+        {
+          "name": "Deadlift",
+          "sets": 3,
+          "reps": 12
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "exercises": [
+        {
+          "name": "Leg press",
+          "sets": 5,
+          "reps": 10
+        },
+        {
+          "name": "Leg extension",
+          "sets": 5,
+          "reps": 12
+        },
+        {
+          "name": "Leg curl",
+          "sets": 5,
+          "reps": 12
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "exercises": [
+        {
+          "name": "Hammer curl",
+          "sets": 5,
+          "reps": 10
+        },
+        {
+          "name": "Triceps extension",
+          "sets": 5,
+          "reps": 12
+        },
+        {
+          "name": "shoulder press",
+          "sets": 5,
+          "reps": 12
+        },
+        {
+          "name": "military press",
+          "sets": 5,
+          "reps": 12
+        }
+      ]
+    }
+  ]
+}

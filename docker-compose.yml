@@ -1,0 +1,22 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: .dockerfiles/Dockerfile
+    links:
+        - db
+    depends_on:
+        - db
+    ports:
+      - "5051:5000"
+  db:
+    build:
+      context: .
+      dockerfile: .dockerfiles/Dockerfile-mysql
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_ROOT_PASSWORD:
+    ports:
+      - "3309:3306"

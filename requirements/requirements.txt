@@ -1,0 +1,9 @@
+Flask==1.0.2
+SQLAlchemy==1.2.15
+Flask-SQLAlchemy==2.3.2
+pyjwt==1.7.1
+bcrypt==3.1.5
+marshmallow==2.16.3
+sendgrid==5.6.0
+mysql-connector==2.1.6
+Flask-Alembic==2.0.1

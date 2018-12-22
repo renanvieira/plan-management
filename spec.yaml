@@ -1,0 +1,485 @@
+swagger: "2.0"
+info:
+  title: Sample API
+  description: API description in Markdown.
+  version: 1.0.0
+host: api.example.com
+schemes:
+  - https
+tags:
+- name: "user"
+  description: "User Management"
+- name: "plan"
+  description: "Plan Management"
+- name: exercise
+  description: "Exercise Management"
+
+paths:
+  /users:
+    post:
+      tags:
+        - user
+      summary: Create a user.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/UserRequest"
+      responses:
+        200:
+          description: "User was successfully created"
+          schema:
+            $ref: "#/definitions/UserResponse"
+        400:
+          description: "Bad request, There is a problema in the request body"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+  /users/{user_id}:
+    post:
+      tags:
+      - user
+      summary: Edit a user.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: "path"
+          name: "user_id"
+          description: ""
+          required: true
+          type: integer
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/UserRequest"
+      responses:
+        200:
+          description: "User was successfully updated"
+          schema:
+            $ref: "#/definitions/UserResponse"
+        400:
+          description: "Bad request, There is a problema in the request body"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+      - user
+      summary: Delete logically a user.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: "path"
+          name: "user_id"
+          description: ""
+          required: true
+          type: integer
+
+      responses:
+        200:
+          description: "User was successfully deleted."
+        400:
+          description: "Bad request, There is a problema in the request body"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+  /plans:
+    get:
+      tags:
+      - plan
+      summary: Returns a list of exercises.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/PlanListResponse"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+      - plan
+      summary: Create a exercises.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          $ref: "#/definitions/PlanRequest"
+      responses:
+        200:
+          description: "Plan was successfully created"
+          schema:
+            $ref: "#/definitions/PlanResponse"
+        400:
+          description: "Bad request, There is a problema in the request body"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+  /plans/{plan_id}:
+      get:
+        tags:
+        - plan
+        summary: Returns a plan using the plan id.
+        description: ''
+        produces:
+          - application/json
+        consumes:
+          - application/json
+        parameters:
+          - in: "path"
+            name: "plan_id"
+            description: "ID of a Plan"
+            required: true
+            type: integer
+
+        responses:
+          200:
+            description: ""
+            schema:
+              $ref: "#/definitions/PlanFullResponse"
+          404:
+            description: "`plan_id` was not found"
+            schema:
+              $ref: '#/definitions/Error'
+          500:
+            description: "Internal Error"
+            schema:
+              $ref: '#/definitions/Error'
+      post:
+        tags:
+          - plan
+        summary: Updates a exercises.
+        description: ''
+        produces:
+          - application/json
+        consumes:
+          - application/json
+        parameters:
+          - in: "path"
+            name: "plan_id"
+            description: "ID of a Plan"
+            required: true
+            type: integer
+
+          - in: "body"
+            name: "body"
+            description: ""
+            required: true
+            schema:
+              $ref: "#/definitions/PlanRequest"
+        responses:
+          200:
+            description: "Plan was successfully created"
+            schema:
+              $ref: "#/definitions/PlanResponse"
+          400:
+            description: "Bad request, There is a problema in the request body"
+            schema:
+              $ref: "#/definitions/ValidationError"
+          500:
+            description: "Internal Error"
+            schema:
+              $ref: '#/definitions/Error'
+  /plans/{plan_id}/enroll:
+    post:
+      tags:
+        - plan
+      summary: Associate a user to a plan.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: "path"
+          name: "plan_id"
+          description: ""
+          required: true
+          type: integer
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/AssociateUserRequest"
+      responses:
+        200:
+          description: "Plan was successfully created"
+          schema:
+            $ref: "#/definitions/AssociateUserResponse"
+        400:
+          description: "Bad request, There is a problem in the request body"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+  /plans/{plan_id}/days:
+    post:
+      tags:
+        - plan
+      summary: Create a training day.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: "path"
+          name: "plan_id"
+          description: ""
+          required: true
+          type: integer
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/DayRequest"
+      responses:
+        200:
+          description: "Plan was successfully created"
+          schema:
+            $ref: "#/definitions/DayResponse"
+        400:
+          description: "Bad request, There is a problem in the request body"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+  /plans/{plan_id}/days{day_number}:
+    delete:
+      tags:
+        - plan
+      summary: Remove a training day.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: "path"
+          name: "plan_id"
+          description: ""
+          required: true
+          type: integer
+        - in: "path"
+          name: "day_number"
+          description: ""
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "Plan was successfully created"
+        400:
+          description: "Bad request, There is a problem in the request body"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+  /exercises:
+   post:
+     tags:
+       - "exercise"
+
+
+definitions:
+  PlanListResponse:
+    type: object
+    properties:
+      total_pages:
+        type: integer
+      limit:
+        type: integer
+      total:
+        type: integer
+      has_more:
+        type: boolean
+      items:
+        $ref: '#/definitions/PlanResponse'
+  PlanRequest:
+    type: object
+    properties:
+      name:
+        type: string
+  PlanFullResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      days:
+        type: array
+        items:
+          $ref: '#/definitions/DayResponse'
+      created_at:
+        type: string
+        format: 'date-time'
+      updated_at:
+        type: string
+        format: 'date-time'
+      deleted_at:
+        type: string
+        format: 'date-time'
+  PlanResponse:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      created_at:
+        type: string
+        format: 'date-time'
+      updated_at:
+        type: string
+        format: 'date-time'
+      deleted_at:
+        type: string
+        format: 'date-time'
+  AssociateUserRequest:
+    type: object
+    properties:
+      user:
+        type: integer
+
+  ValidationErrorItem:
+    type: object
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+  ValidationError:
+    type: object
+    properties:
+      validation_error:
+        $ref: '#/definitions/ValidationErrorItem'
+  Error:
+    type: object
+    properties:
+      error:
+        type: object
+        properties:
+          message:
+            type: string
+  DayResponse:
+    type: object
+    properties:
+      number:
+        type: integer
+      exercises:
+        type: array
+        items:
+          $ref: '#/definitions/Exercise'
+
+  Exercise:
+    type: object
+    properties:
+      name:
+        type: string
+      sets:
+        type: integer
+      reps:
+        type: integer
+  AssociateUserResponse:
+    type: object
+    properties:
+      user:
+        type: integer
+      associated_user_count:
+        type: integer
+  DayRequest:
+    type: object
+    properties:
+      number:
+        type: integer
+      exercises:
+        type: array
+        items:
+          $ref: '#/definitions/Exercise'
+  UserRequest:
+    type: object
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      birth_date:
+        type: string
+        format: date
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+  UserResponse:
+    type: object
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      birth_date:
+        type: string
+        format: date
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+      created_at:
+        type: string
+        format: 'date-time'
+      updated_at:
+        type: string
+        format: 'date-time'
+      deleted_at:
+        type: string
+        format: 'date-time'
