@@ -1,4 +1,4 @@
-# Workout Management
+# Workout Management ![](spec/coverage.svg)
 Rest API for manage workout plans.
 
 # Dependencies
@@ -63,8 +63,9 @@ Ran 56 tests in 100.836s
 ```
 
 # Documentation
+## Swagger specification
+[Swagger File](spec/swagger.yaml)
+
 ## Database Diagram
 ![Database Diagram](spec/database-diagram.png)
 
-## Swagger specification
-[Swagger File](spec/swagger.yaml)
