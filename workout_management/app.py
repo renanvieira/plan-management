@@ -1,5 +1,6 @@
 import importlib
 import inspect
+import os
 import pkgutil
 
 from flask import Flask, Blueprint
@@ -47,9 +48,10 @@ def register_middlewares(app):
     return None
 
 
-def create_app(env=ConfigEnum.Development):
+def create_app(env=None):
     app = Flask(__name__)
-    app.config.from_object(ENVIRONMENTS[env])
+    config_env = env if env is not None else ConfigEnum(os.getenv("FLASK_ENV", "development"))
+    app.config.from_object(ENVIRONMENTS[config_env])
     register_extensions(app)
     register_blueprints(app)
     register_middlewares(app)

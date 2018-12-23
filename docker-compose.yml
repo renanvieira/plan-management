@@ -10,11 +10,17 @@ services:
         - db
     ports:
       - "5051:5000"
+    restart: on-failure:10
   db:
     build:
       context: .
       dockerfile: .dockerfiles/Dockerfile-mysql
     restart: always
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_ROOT_PASSWORD:

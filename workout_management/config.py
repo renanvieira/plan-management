@@ -11,7 +11,7 @@ class Application(object):
 class ConfigEnum(Enum):
     Production = 'production'
     Staging = 'staging'
-    Development = "dev"
+    Development = "development"
     Testing = 'testing'
 
 
@@ -22,13 +22,14 @@ class Config(object):
     SECRET_KEY = '94>,r47H8]9]Foth?RY!F4Ys^kFbZ2'
     SENDGRID_API_KEY = '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'
     MAIL_FROM = "test@renanvieira.net"
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:@localhost:3309/workout_mgmt"
     ITEMS_PER_PAGE = 10
 
 
 class ProductionConfig(Config):
     DEVELOPMENT = False
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:@localhost:3309/workout_mgmt"
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:@db/workout_mgmt"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_EXPIRATION_IN_SECONDS = 300
 

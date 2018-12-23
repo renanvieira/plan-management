@@ -7,8 +7,9 @@ RUN mkdir /srv/app
 COPY . /srv/app
 WORKDIR /srv/app
 
-ENV FLASK_APP=virtuagym_api/app.py
+ENV FLASK_APP=workout_management/app.py
+ENV FLASK_ENV=production
 RUN apk add --update gcc make g++ openssl-dev libffi-dev
 RUN pip install -r requirements/dev-requirements.txt --user
 
-CMD python -m flask run --port 5000 --host 0.0.0.0
+CMD  python -m flask run --port 5000 --host 0.0.0.0

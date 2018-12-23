@@ -15,6 +15,10 @@ Rest API for manage workout plans.
 $ make start-docker
 ```
 
+#### Containers
+   * `web`: API running on port [`5051`](http://localhost:5051)
+   * `db`: MySQL database running on port `3009`
+
 If you need to stop/remove the containers use the following command:
 ```bash
 $ make stop-docker
