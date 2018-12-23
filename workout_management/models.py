@@ -22,8 +22,6 @@ class User(db.Model):
         db.Model.__init__(self, **dict)
         if "password" in dict.keys():
             self.set_password(dict["password"].rstrip())
-        else:
-            self.password = None
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(64), nullable=False)
@@ -109,9 +107,6 @@ class Day(db.Model):
     @classmethod
     def new_from_dict(cls, day_data):
         day = Day(number=day_data["number"])
-
-        if "plan" in day_data:
-            day.plan = day_data["plan"]
 
         if "exercises" in day_data:
             for exercise_data in day_data["exercises"]:

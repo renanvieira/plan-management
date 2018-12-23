@@ -30,3 +30,9 @@ class ExerciseListTestCase(BaseTestCase):
 
         self.assert200(result)
         self.assertIsNotNone(result.json)
+
+
+    def test_get_exercises_with_invalid_id(self):
+        result = self.client.get(f"/exercises/9999994")
+
+        self.assert404(result)
