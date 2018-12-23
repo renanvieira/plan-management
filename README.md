@@ -1,4 +1,4 @@
-# Workout Management ![](spec/coverage.svg)
+# Workout Management ![Code Coverage %](spec/coverage.svg)
 Rest API for manage workout plans.
 
 # Dependencies
