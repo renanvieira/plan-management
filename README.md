@@ -1,5 +1,6 @@
-# Workout Management ![](spec/coverage.svg)
+# Workout Management  ![](spec/coverage.svg)
 Rest API for manage workout plans.
+
 
 # Dependencies
 * Python 3.6
