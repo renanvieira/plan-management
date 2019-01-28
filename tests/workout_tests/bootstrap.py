@@ -4,8 +4,8 @@ import string
 from datetime import datetime
 
 from flask.testing import FlaskClient
-from flask_alembic import Alembic
 from flask_testing import TestCase
+from sqlalchemy.exc import DatabaseError
 
 from workout_management.app import create_app
 from workout_management.config import ConfigEnum
@@ -46,6 +46,9 @@ class BaseTestCase(TestCase):
         self.token_expiration = 300
         super(BaseTestCase, self).__init__(*args, **kwargs)
 
+    def raise_exception(self, *args):
+        raise DatabaseError("SELECT 1", {}, "")
+
     def create_user(self, password="123$456#", deleted=False):
         signup_data = {
             "first_name": "Test",
@@ -83,7 +86,6 @@ class BaseTestCase(TestCase):
         db_context.session.commit()
 
     def setUp(self, need_auth=True):
-        self.clean_users()
         self.app.config["JWT_EXPIRATION_IN_SECONDS"] = self.token_expiration
 
         if need_auth:
@@ -98,9 +100,6 @@ class BaseTestCase(TestCase):
         super(BaseTestCase, self).tearDown()
         del self.client
 
-        if self._auth_user is not None:
-            self.clean_users()
-
         for exercise in Exercise.query.all():
             db_context.session.delete(exercise)
 
@@ -110,8 +109,9 @@ class BaseTestCase(TestCase):
         for plan in Plan.query.all():
             db_context.session.delete(plan)
 
-        for user in User.query.filter(~User.plans.any()).all():
+        for user in User.query.all():
             db_context.session.delete(user)
+
         db_context.session.commit()
 
     def create_app(self):

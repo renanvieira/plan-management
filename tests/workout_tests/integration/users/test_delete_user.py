@@ -1,8 +1,8 @@
 from http import HTTPStatus
+from unittest import mock
+from unittest.mock import PropertyMock, Mock
 
-from workout_management.extensions import db_context
-from workout_management.models import User
-from workout_tests.bootstrap import BaseTestCase
+from workout_tests.bootstrap import BaseTestCase, User
 
 
 class UserDeletionTestCase(BaseTestCase):
@@ -27,3 +27,11 @@ class UserDeletionTestCase(BaseTestCase):
         result = self.client.delete(f"/users/99999")
 
         self.assert404(result)
+
+    @mock.patch.object(User, "query", new_callable=PropertyMock)
+    def test_delete_user_with_error(self, mock_obj):
+        mock_obj.return_value.filter.side_effect = [Mock(autospec=True), self.raise_exception]
+
+        result = self.client.delete(f"/users/{self._auth_user.id}")
+
+        self.assert500(result)

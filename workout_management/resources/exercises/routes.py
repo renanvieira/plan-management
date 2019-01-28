@@ -50,6 +50,7 @@ def create_exercise():
 
 
 @exercise_blueprint.route("/exercises/<int:id>", methods=["POST"])
+@login_required
 def edit_exercise(id):
     schema, errors = exercise_edit_schema.load(request.get_json())
     if errors:
@@ -76,6 +77,7 @@ def edit_exercise(id):
 
 
 @exercise_blueprint.route("/exercises/<int:id>", methods=["DELETE"])
+@login_required
 def delete_exercise(id):
     try:
         exercise = Exercise.query.filter(Exercise.id == id).first()
@@ -95,6 +97,7 @@ def delete_exercise(id):
 
 
 @exercise_blueprint.route("/exercises/<int:id>", methods=["GET"])
+@login_required
 def get_exercise(id):
     try:
         exercise = Exercise.query.filter_by(id=id).first()
@@ -109,6 +112,7 @@ def get_exercise(id):
 
 
 @exercise_blueprint.route("/exercises", methods=["GET"])
+@login_required
 def list_exercises():
     try:
         page = int(request.args.get("page", 1))

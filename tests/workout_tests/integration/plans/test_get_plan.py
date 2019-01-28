@@ -1,9 +1,10 @@
 import json
 from http import HTTPStatus
 from os.path import abspath
+from unittest import mock
+from unittest.mock import PropertyMock
 
-from workout_management.extensions import db_context
-from workout_management.models import Plan, User, Day, Exercise
+from workout_management.models import Plan
 from workout_tests.bootstrap import BaseTestCase
 from workout_tests.integration.plans import __location__
 
@@ -36,3 +37,11 @@ class GetPlanTestCase(BaseTestCase):
         result = self.client.get(f"/plans/{99999}")
 
         assert result.status_code == HTTPStatus.NOT_FOUND
+
+    @mock.patch.object(Plan, "query", new_callable=PropertyMock)
+    def test_get_plan_with_error(self, mock_obj):
+        mock_obj.return_value.filter_by.side_effect = self.raise_exception
+
+        result = self.client.get(f"/plans/{self.plan.id}")
+
+        self.assert500(result)

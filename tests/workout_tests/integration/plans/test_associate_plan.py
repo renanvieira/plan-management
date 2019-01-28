@@ -1,7 +1,9 @@
 import json
 from os.path import abspath
+from unittest import mock
+from unittest.mock import PropertyMock
 
-from workout_tests.bootstrap import BaseTestCase
+from workout_tests.bootstrap import BaseTestCase, Plan
 from workout_tests.integration.plans import __location__
 
 
@@ -71,3 +73,15 @@ class AssociateUserToPlanTestCase(BaseTestCase):
         result = self.client.post(f"/plans/{self.plan.id}/enroll", json=new_data)
 
         self.assert400(result)
+
+    @mock.patch.object(Plan, "query", new_callable=PropertyMock)
+    def test_associate_plan_with_error(self, mock_obj):
+        mock_obj.return_value.filter_by.side_effect = self.raise_exception
+
+        new_data = {
+            "name": "Summer Plan"
+        }
+
+        result = self.client.post(f"/plans/{self.plan.id}", json=new_data)
+
+        self.assert500(result)

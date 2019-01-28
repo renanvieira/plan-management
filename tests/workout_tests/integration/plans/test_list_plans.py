@@ -1,7 +1,8 @@
 import json
 from os.path import abspath
+from unittest import mock
+from unittest.mock import PropertyMock
 
-from workout_management.extensions import db_context
 from workout_management.models import Plan
 from workout_tests.bootstrap import BaseTestCase
 from workout_tests.integration.plans import __location__
@@ -28,3 +29,11 @@ class PlanListTestCase(BaseTestCase):
         self.assert200(result)
         self.assertIsNotNone(result.json)
         self.assertEqual(result.json["total"], 3)
+
+    @mock.patch.object(Plan, "query", new_callable=PropertyMock)
+    def test_list_plan_with_error(self, mock_obj):
+        mock_obj.return_value.paginate.side_effect = self.raise_exception
+
+        result = self.client.get(f"/plans")
+
+        self.assert500(result)

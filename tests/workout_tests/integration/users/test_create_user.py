@@ -1,6 +1,7 @@
-from workout_management.extensions import db_context
-from workout_management.models import User
-from workout_tests.bootstrap import BaseTestCase
+from unittest import mock
+from unittest.mock import PropertyMock
+
+from workout_tests.bootstrap import BaseTestCase, User
 
 
 class UserCreationTestCase(BaseTestCase):
@@ -64,3 +65,19 @@ class UserCreationTestCase(BaseTestCase):
         result2 = self.client.post("/users", json=signup_data)
 
         self.assert400(result2, result2.data.decode("utf-8"))
+
+    @mock.patch.object(User, "query", new_callable=PropertyMock)
+    def test_create_user_with_error(self, mock_obj):
+        mock_obj.return_value.filter_by.side_effect = self.raise_exception
+
+        signup_data = {
+            "first_name": "Test 2",
+            "last_name": "User 2",
+            "email": "user@test.com",
+            "birth_date": "1992-11-21",
+            "password": "789#321@"
+        }
+
+        result = self.client.post(f"/users", json=signup_data)
+
+        self.assert500(result)

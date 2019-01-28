@@ -1,7 +1,9 @@
 import json
 from os.path import abspath
+from unittest import mock
+from unittest.mock import PropertyMock
 
-from workout_tests.bootstrap import BaseTestCase
+from workout_tests.bootstrap import BaseTestCase, Plan
 from workout_tests.integration.exercises import __location__
 
 
@@ -80,3 +82,19 @@ class ExerciseCreationTestCase(BaseTestCase):
         result2 = self.default_client.post("/exercises", json=data)
 
         self.assert401(result2)
+
+    @mock.patch.object(Plan, "query", new_callable=PropertyMock)
+    def test_create_exercise_with_error(self, mock_obj):
+        mock_obj.return_value.filter.side_effect = self.raise_exception
+
+        data = {
+            "name": "Inclined Bench Press",
+            "sets": 3,
+            "reps": 12,
+            "plan": self.plan.id,
+            "day_number": 4
+        }
+
+        result = self.client.post(f"/exercises", json=data)
+
+        self.assert500(result)

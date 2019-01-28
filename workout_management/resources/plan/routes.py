@@ -174,28 +174,32 @@ def add_workout_day(plan_id):
     if errors:
         return json.dumps(ValidationError.new_from_marshmallow_error_dict(errors)), HTTPStatus.BAD_REQUEST
 
-    plan = Plan.query.filter_by(id=plan_id).first()
+    try:
+        plan = Plan.query.filter_by(id=plan_id).first()
 
-    if plan is None:
-        return json.dumps(ObjectNotFound().new()), HTTPStatus.NOT_FOUND
+        if plan is None:
+            return json.dumps(ObjectNotFound().new()), HTTPStatus.NOT_FOUND
 
-    day_number = int(schema["number"])
+        day_number = int(schema["number"])
 
-    if Plan.query.filter(Plan.days.any(number=day_number)).count() > 0:
-        return json.dumps(ObjectAlreadyRegisteredError().new("day", "number", schema["number"])), HTTPStatus.BAD_REQUEST
+        if Plan.query.filter(Plan.days.any(number=day_number)).count() > 0:
+            return json.dumps(
+                ObjectAlreadyRegisteredError().new("day", "number", schema["number"])), HTTPStatus.BAD_REQUEST
 
-    schema["exercises"] = list({val["name"].strip().title(): val for val in schema["exercises"]}.values())
+        schema["exercises"] = list({val["name"].strip().title(): val for val in schema["exercises"]}.values())
 
-    exercises = [Exercise(**item) for item in schema["exercises"]]
+        exercises = [Exercise(**item) for item in schema["exercises"]]
 
-    day = Day(number=schema["number"], plan=plan, exercises=exercises)
+        day = Day(number=schema["number"], plan=plan, exercises=exercises)
 
-    db.session.add(day)
-    db.session.commit()
+        db.session.add(day)
+        db.session.commit()
 
-    plan.notify_users()
+        plan.notify_users()
 
-    return json.dumps(day_schema.dump(day).data)
+        return json.dumps(day_schema.dump(day).data)
+    except Exception as e:
+        return json.dumps(ResponseError.new_generic_error()), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 @plan_blueprint.route("/plans/<int:plan_id>/days", methods=["GET"])

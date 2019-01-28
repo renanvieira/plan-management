@@ -1,9 +1,9 @@
 import json
 from os.path import abspath
+from unittest import mock
+from unittest.mock import PropertyMock
 
-from workout_management.extensions import db_context
-from workout_management.models import Plan, Day, Exercise, User
-from workout_tests.bootstrap import BaseTestCase
+from workout_tests.bootstrap import BaseTestCase, Day
 from workout_tests.integration.plans import __location__
 
 
@@ -70,3 +70,11 @@ class PlanDaysTestCase(BaseTestCase):
         result = self.client.get(f"/plans/9999995/days")
 
         self.assert404(result)
+
+    @mock.patch.object(Day, "query", new_callable=PropertyMock)
+    def test_get_plan_days_with_error(self, mock_obj):
+        mock_obj.return_value.filter_by.side_effect = self.raise_exception
+
+        result = self.client.get(f"/plans/{self.plan.id}/days")
+
+        self.assert500(result)

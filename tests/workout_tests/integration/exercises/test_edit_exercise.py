@@ -1,8 +1,10 @@
 import json
 from os.path import abspath
+from unittest import mock
+from unittest.mock import PropertyMock
 
 from workout_management.extensions import db_context
-from workout_management.models import User, Plan, Exercise, Day
+from workout_management.models import Exercise, Day
 from workout_tests.bootstrap import BaseTestCase
 from workout_tests.integration.exercises import __location__
 
@@ -24,7 +26,6 @@ class ExerciseEditTestCase(BaseTestCase):
         super(ExerciseEditTestCase, self).tearDown()
 
     def test_edit_exercise(self):
-
         new_data = {
             "name": "Sumo Deadlift",
             "reps": 20
@@ -38,7 +39,6 @@ class ExerciseEditTestCase(BaseTestCase):
         self.assertEqual(result.json["reps"], 20)
 
     def test_edit_exercise_invalid_body(self):
-
         new_data = {
             "reps": "ABC"
         }
@@ -48,7 +48,6 @@ class ExerciseEditTestCase(BaseTestCase):
         self.assert400(result)
 
     def test_edit_exercise_invalid_id(self):
-
         new_data = {
             "name": "Sumo Deadlift"
         }
@@ -56,3 +55,16 @@ class ExerciseEditTestCase(BaseTestCase):
         result = self.client.post(f"/exercises/9999996", json=new_data)
 
         self.assert404(result)
+
+    @mock.patch.object(Exercise, "query", new_callable=PropertyMock)
+    def test_edit_exercise_with_error(self, mock_obj):
+        mock_obj.return_value.filter_by.side_effect = self.raise_exception
+
+        data = {
+            "sets": 3,
+            "reps": 12,
+        }
+
+        result = self.client.post(f"/exercises/{self.exercise.id}", json=data)
+
+        self.assert500(result)

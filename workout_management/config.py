@@ -52,6 +52,7 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://root:@localhost:3309/workout_mgmt_test"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_EXPIRATION_IN_SECONDS = 2
+    SENDGRID_API_KEY = 'asdasdasdasd'
 
 
 ENVIRONMENTS = {

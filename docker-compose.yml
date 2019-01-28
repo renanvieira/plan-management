@@ -5,9 +5,9 @@ services:
       context: .
       dockerfile: .dockerfiles/Dockerfile
     links:
-        - db
+      - db
     depends_on:
-        - db
+      - db
     ports:
       - "5051:5000"
     restart: on-failure:10

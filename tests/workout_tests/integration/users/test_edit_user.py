@@ -1,8 +1,7 @@
-from time import sleep
+from unittest import mock
+from unittest.mock import PropertyMock, Mock
 
-from flask import app
-
-from workout_tests.bootstrap import BaseTestCase
+from workout_tests.bootstrap import BaseTestCase, User
 
 
 class UserDeletionTestCase(BaseTestCase):
@@ -66,3 +65,16 @@ class UserDeletionTestCase(BaseTestCase):
         result = self.client.post(f"/users/{self.user.id}", json=new_data)
 
         self.assert403(result)
+
+    @mock.patch.object(User, "query", new_callable=PropertyMock)
+    def test_edit_user_with_error(self, mock_obj):
+        new_data = {
+            "first_name": "Testing",
+            "last_name": "User Application"
+        }
+
+        mock_obj.return_value.filter.side_effect = [Mock(autospec=True), self.raise_exception]
+
+        result = self.client.post(f"/users/{self._auth_user.id}", json=new_data)
+
+        self.assert500(result)

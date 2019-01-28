@@ -7,12 +7,12 @@ host: api.example.com
 schemes:
   - https
 tags:
-- name: "user"
-  description: "User Management"
-- name: "plan"
-  description: "Plan Management"
-- name: exercise
-  description: "Exercise Management"
+  - name: "user"
+    description: "User Management"
+  - name: "plan"
+    description: "Plan Management"
+  - name: exercise
+    description: "Exercise Management"
 
 paths:
   /users:
@@ -48,7 +48,7 @@ paths:
   /users/{user_id}:
     post:
       tags:
-      - user
+        - user
       summary: Edit a user.
       description: ''
       produces:
@@ -82,7 +82,7 @@ paths:
             $ref: '#/definitions/Error'
     delete:
       tags:
-      - user
+        - user
       summary: Delete logically a user.
       description: ''
       produces:
@@ -110,7 +110,7 @@ paths:
   /plans:
     get:
       tags:
-      - plan
+        - plan
       summary: Returns a list of exercises.
       description: ''
       produces:
@@ -128,7 +128,7 @@ paths:
             $ref: '#/definitions/Error'
     post:
       tags:
-      - plan
+        - plan
       summary: Create a exercises.
       description: ''
       produces:
@@ -136,12 +136,12 @@ paths:
       consumes:
         - application/json
       parameters:
-      - in: "body"
-        name: "body"
-        description: ""
-        required: true
-        schema:
-          $ref: "#/definitions/PlanRequest"
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/PlanRequest"
       responses:
         200:
           description: "Plan was successfully created"
@@ -156,70 +156,70 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /plans/{plan_id}:
-      get:
-        tags:
+    get:
+      tags:
         - plan
-        summary: Returns a plan using the plan id.
-        description: ''
-        produces:
-          - application/json
-        consumes:
-          - application/json
-        parameters:
-          - in: "path"
-            name: "plan_id"
-            description: "ID of a Plan"
-            required: true
-            type: integer
+      summary: Returns a plan using the plan id.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: "path"
+          name: "plan_id"
+          description: "ID of a Plan"
+          required: true
+          type: integer
 
-        responses:
-          200:
-            description: ""
-            schema:
-              $ref: "#/definitions/PlanFullResponse"
-          404:
-            description: "`plan_id` was not found"
-            schema:
-              $ref: '#/definitions/Error'
-          500:
-            description: "Internal Error"
-            schema:
-              $ref: '#/definitions/Error'
-      post:
-        tags:
-          - plan
-        summary: Updates a exercises.
-        description: ''
-        produces:
-          - application/json
-        consumes:
-          - application/json
-        parameters:
-          - in: "path"
-            name: "plan_id"
-            description: "ID of a Plan"
-            required: true
-            type: integer
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/PlanFullResponse"
+        404:
+          description: "`plan_id` was not found"
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - plan
+      summary: Updates a exercises.
+      description: ''
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: "path"
+          name: "plan_id"
+          description: "ID of a Plan"
+          required: true
+          type: integer
 
-          - in: "body"
-            name: "body"
-            description: ""
-            required: true
-            schema:
-              $ref: "#/definitions/PlanRequest"
-        responses:
-          200:
-            description: "Plan was successfully created"
-            schema:
-              $ref: "#/definitions/PlanResponse"
-          400:
-            description: "Bad request, There is a problema in the request body"
-            schema:
-              $ref: "#/definitions/ValidationError"
-          500:
-            description: "Internal Error"
-            schema:
-              $ref: '#/definitions/Error'
+        - in: "body"
+          name: "body"
+          description: ""
+          required: true
+          schema:
+            $ref: "#/definitions/PlanRequest"
+      responses:
+        200:
+          description: "Plan was successfully created"
+          schema:
+            $ref: "#/definitions/PlanResponse"
+        400:
+          description: "Bad request, There is a problema in the request body"
+          schema:
+            $ref: "#/definitions/ValidationError"
+        500:
+          description: "Internal Error"
+          schema:
+            $ref: '#/definitions/Error'
   /plans/{plan_id}/enroll:
     post:
       tags:
@@ -323,9 +323,9 @@ paths:
           schema:
             $ref: '#/definitions/Error'
   /exercises:
-   post:
-     tags:
-       - "exercise"
+    post:
+      tags:
+        - "exercise"
 
 
 definitions:

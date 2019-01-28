@@ -1,5 +1,7 @@
 import json
 from os.path import abspath
+from unittest import mock
+from unittest.mock import PropertyMock
 
 from workout_management.extensions import db_context
 from workout_management.models import Day, Exercise
@@ -31,8 +33,15 @@ class ExerciseListTestCase(BaseTestCase):
         self.assert200(result)
         self.assertIsNotNone(result.json)
 
-
     def test_get_exercises_with_invalid_id(self):
         result = self.client.get(f"/exercises/9999994")
 
         self.assert404(result)
+
+    @mock.patch.object(Exercise, "query", new_callable=PropertyMock)
+    def test_get_exercise_with_error(self, mock_obj):
+        mock_obj.return_value.filter_by.side_effect = self.raise_exception
+
+        result = self.client.get(f"/exercises/{self.exercise.id}")
+
+        self.assert500(result)

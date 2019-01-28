@@ -1,7 +1,9 @@
 import json
 from os.path import abspath
+from unittest import mock
+from unittest.mock import PropertyMock
 
-from workout_tests.bootstrap import BaseTestCase
+from workout_tests.bootstrap import BaseTestCase, Plan
 from workout_tests.integration.plans import __location__
 
 
@@ -26,6 +28,18 @@ class PlanCreationTestCase(BaseTestCase):
         self.assertIsNotNone(result.json)
         self.assertIn("id", result.json)
         self.assertTrue(isinstance(result.json["id"], int))
+
+    @mock.patch.object(Plan, "query", new_callable=PropertyMock)
+    def test_create_plan_with_error(self, mock_obj):
+        mock_obj.return_value.filter_by.side_effect = self.raise_exception
+
+        new_data = {
+            "name": "Summer Plan"
+        }
+
+        result = self.client.post(f"/plans", json=new_data)
+
+        self.assert500(result)
 
     def test_create_plan_without_name(self):
         result = self.client.post("/plans", json=self.create_payload_without_name)

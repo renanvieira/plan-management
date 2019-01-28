@@ -87,7 +87,6 @@ class AuthLoginTestCase(BaseTestCase):
         self.assert400(result_refresh)
 
     def test_edit_user_after_token_expires(self):
-
         user = self.create_user()
 
         new_data = {

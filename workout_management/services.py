@@ -1,6 +1,7 @@
 import logging
+
 from flask import current_app as app
-import sendgrid
+from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import *
 
 logger = logging.getLogger(__name__)
@@ -11,7 +12,7 @@ class SendGrindService(object):
     def __init__(self, api_key):
         self.__api_key = api_key
         self._from = app.config["MAIL_FROM"]
-        self.__client = sendgrid.SendGridAPIClient(apikey=api_key)
+        self.__client = SendGridAPIClient(apikey=api_key)
 
     def send(self, to, subject, text):
         try:
